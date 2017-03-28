@@ -1,0 +1,17 @@
+{
+  "name": "bower",
+  "description": "",
+  "main": "",
+  "authors": [
+    "mumu <429461542@qq.com>"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
