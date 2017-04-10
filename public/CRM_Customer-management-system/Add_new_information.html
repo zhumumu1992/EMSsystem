@@ -2,7 +2,7 @@
 <html>
 
 	<head>
-		<title>添加新信息 - CRM客户管理系统</title>
+		<title>添加新信息 - EMS员工管理系统</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta charset="UTF-8">
 		<!--标题Ico图标-->
@@ -12,11 +12,13 @@
 		<!--自定义CSS-->
 		<link href="css/style.css" rel='stylesheet' type='text/css' />
 		<!--小图标CSS-->
-		<link href="css/font-awesome.css" rel="stylesheet">
-		<link rel="stylesheet" href="css/icon-font.min.css" type='text/css' />
+		<link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+		<link rel="stylesheet" href="https://cdn.linearicons.com/free/1.0.0/icon-font.min.css">
 		<!--标题添加延迟效果-->
 		<link href="css/animate.css" rel="stylesheet" type="text/css" media="all">
 		<script src="js/jquery-1.10.2.min.js"></script>
+		<!--设置年月日星期-->
+		<script src="js/moment.min.js"></script>
 	</head>
 
 	<body class="sticky-header left-side-collapsed">
@@ -37,7 +39,7 @@
 		<div class="left-side sticky-left-side">
 			<!--logo-->
 			<div class="logo">
-				<h1><a href="index.html">欢迎您 <span>Admin</span></a></h1>
+				<h1><a href="home.html">欢迎您 <span>Admin</span></a></h1>
 			</div>
 			<!--主页按钮小图标-->
 			<div class="logo-icon text-center">
@@ -51,19 +53,19 @@
 						<a href="Customer-information.html"><i class="lnr lnr-users" title="客户信息"></i> <span>客户信息</span></a>
 					</li>
 					<li>
-						<a href="Piechart.html"><i class="lnr lnr-pie-chart" title="饼状图"></i> <span>饼状图</span></a>
+						<a href="Piechart.html"><i class="lnr lnr-pie-chart" title="年龄区间统计"></i> <span>年龄区间统计</span></a>
 					</li>
 					<li class="menu-list">
-						<a href="BarLineChart.html"><i class="lnr lnr-chart-bars" title="柱线图"></i> <span>柱线图</span></a>
+						<a href="BarLineChart.html"><i class="lnr lnr-chart-bars" title="年龄身高体重统计"></i> <span>年龄身高体重统计</span></a>
 					</li>
 					<li class="menu-list">
-						<a href="Piechart2.html"><i class="lnr lnr-pie-chart" title="饼状图"></i> <span>饼状图</span></a>
+						<a href="Piechart2.html"><i class="lnr lnr-pie-chart" title="所在部门统计"></i> <span>所在部门统计</span></a>
 					</li>
 					<li>
-						<a href="bar_Average.html"><i class="lnr lnr-chart-bars" title="柱状图"></i> <span>柱状图</span></a>
+						<a href="bar_Average.html"><i class="lnr lnr-chart-bars" title="平均身高体重统计"></i> <span>平均身高体重统计</span></a>
 					</li>
 					<li>
-						<a href="Piechart3.html"><i class="lnr lnr-chart-bars" title="柱状图"></i> <span>柱状图</span></a>
+						<a href="Bar3.html"><i class="lnr lnr-chart-bars" title="平均年龄统计"></i> <span>平均年龄统计</span></a>
 					</li>
 					<li>
 						<a href="delete.html"><i class="lnr lnr-trash" title="回收站"></i> <span>回收站</span></a>
@@ -269,7 +271,7 @@
 						</div>
 						<!--时钟-->
 						<script>
-							$(document).ready(function() {
+							$(function() {
 								setInterval(function() {
 									// 创建一个对象，并提取newDate（）在访问者的当前时间的秒
 									var seconds = new Date().getSeconds();
@@ -288,9 +290,22 @@
 									// 添加前导零的小时值
 									$("#hours").html((hours < 10 ? "0" : "") + hours);
 								}, 1000);
-							});
+								
+								//设置年月日星期
+								var weekday = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+								(function update_time() {
+									//调用moment.js来格式化时间
+									var now = moment().format("HHmmss");
+									var date = moment().format("YYYY年MM月DD日");
+									var week = weekday[moment().format('d')];
+									$(".date").html(date + ' ' + week);
+									// 每秒钟运行一次
+									setTimeout(update_time, 1000);
+								})();
+							})
 						</script>
 						<div class="clock">
+							<span class="date"></span>
 							<ul>
 								<li id="hours"> </li>
 								<li id="point">:</li>
@@ -329,27 +344,50 @@
 												</div>
 											</div>
 											<ul class="about">
-												<li><i class="glyphicon glyphicon-user"></i><label>姓名</label><input type="text" class="form-control1 modifyName" value=""></li>
-												<li><i class="fa fa-male" style="font-size: 24px;"></i>性别<input type="text" class="form-control1 modifySex" value=""></li>
-												<li><i class="fa fa-handshake-o"></i><label>职业</label><input type="text" class="form-control1 modifyJob" value=""></li>
-												<li><i class="glyphicon glyphicon-folder-open"></i><label>优秀作品</label><input type="text" class="form-control1 modifyWorks" value=""></li>
-												<li><i class="glyphicon glyphicon-earphone"></i><label>联系方式</label><input type="number" class="form-control1 modifyTel" value=""><p class="errorinfo error_3"></p></li>
-												<li><i class="glyphicon glyphicon-envelope"></i><label>邮箱</label><input type="text" class="form-control1 modifyEmail" value=""><p class="errorinfo error_2"></p></li>
+												<li><i class="fa fa-user-o"></i><label>姓名</label><input type="text" class="form-control1 modifyName" value=""></li>
+												<li><i class="fa fa-male" style="font-size: 24px;"></i>性别
+													<div class="userSex">
+														<i style="width: 30px;">男</i><input type="radio" name="sex" value="男">&nbsp;
+														<i style="margin-left: 30px; width: 30px;">女</i><input type="radio" name="sex" value="女">
+													</div>
+												</li>
+												<li><i class="fa fa-handshake-o"></i><label>职位</label><input type="text" class="form-control1 modifyJob" value=""></li>
+												<li><i class="fa fa-phone"></i><label>联系方式</label><input type="number" class="form-control1 modifyTel" value=""><p class="errorinfo error_3"></p></li>
+												<li><i class="fa fa-envelope-o"></i><label>邮箱</label><input type="text" class="form-control1 modifyEmail" value=""><p class="errorinfo error_2"></p></li>
 											</ul>
 											<div class="title_content">
 												<div class="name">detailed information</div>
 											</div>
 											<ul class="about clear">
 												<li><i class="fa fa-address-card"></i><label>年龄</label><input type="number" class="form-control1 modifyAge" value=""></li>
-												<li><i class="glyphicon glyphicon-calendar"></i><label>出生日期</label><input type="date" class="form-control1 modifyBirthDate" value=""></li>
+												<li><i class="fa fa-history"></i><label>出生日期</label><input type="date" class="form-control1 modifyBirthDate" value=""></li>
 												<li><i class="fa fa-universal-access"></i><label>身高</label><input type="number" class="form-control1 modifyHeight" value=""></li>
 												<li><i class="fa fa-balance-scale"></i><label>体重</label><input type="number" class="form-control1 modifyWeight" value=""></li>
-												<li><i class="glyphicon glyphicon-heart"></i><label>婚姻状况</label><input type="text" class="form-control1 modifyMariteal" value=""></li>
-												<li><i class="glyphicon glyphicon-map-marker"></i><label>住址</label><input type="text" class="form-control1 modifyAddress" value=""></li>
-												<li><i class="fa fa-users"></i><label>所在部门</label><input type="text" class="form-control1 modifyDepartment" value=""></li>
-												<li><i class="glyphicon glyphicon-time"></i><label>入职时间</label><input type="date" class="form-control1 modifyInductionTime" value=""></li>
-												<li><i class="glyphicon glyphicon-tags"></i><label>工作状态</label><input type="text" class="form-control1 modifyCat" value=""></li>
-												<li><i class="glyphicon glyphicon-paperclip"></i><label>岗位类别</label><input type="text" class="form-control1 modifyJobCategory" value=""></li>
+												<li><i class="fa fa-heart"></i><label>婚姻状况</label><input type="text" class="form-control1 modifyMariteal" value=""></li>
+												<li><i class="fa fa-home"></i><label>住址</label><input type="text" class="form-control1 modifyAddress" value=""></li>
+												<li><i class="fa fa-users" class="fa_Icon"></i><label>所在部门</label>
+													<select class="form-control selectLine">
+														<option>技术部</option>
+														<option>人事部</option>
+														<option>运营部</option>
+														<option>市场部</option>
+														<option>销售部</option>
+														<option>财务部</option>
+													</select>
+												</li>
+												<li><i class="fa fa-calendar"></i><label>入职时间</label><input type="date" class="form-control1 modifyInductionTime" value=""></li>
+												<li><i class="fa fa-user-plus"></i><label>工作状态</label>
+													<div class="userCat"><i>在职</i>
+														<input type="radio" name="cat" value="在职">&nbsp;<i style="margin-left: 15px;">离职</i>
+														<input type="radio" name="cat" value="离职">
+													</div>
+												</li>
+												<li><i class="fa fa-suitcase"></i><label>岗位类别</label>
+													<div class="userJobCategory"><i>正式</i>
+														<input type="radio" name="JobCategory" value="正式">&nbsp;<i style="margin-left: 15px;">实习</i>
+														<input type="radio" name="JobCategory" value="实习">
+													</div>
+												</li>
 											</ul>
 										</div>
 									</div>

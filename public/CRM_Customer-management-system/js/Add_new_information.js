@@ -10,13 +10,13 @@ if(sessionStorage.admin_name){
 	});
 }else{
 	$('.profile_details>ul').hide();
-	var str = '<div class="user-name"><a href="Login.html" class="userName">未登录，请登录！</a><span>Administrator</span></div>';
+	var str = '<div class="user-name"><a href="index.html" class="userName">未登录，请登录！</a><span>Administrator</span></div>';
 	$('.profile_details').append(str);
 	$('.user-name').css('width','100%');
 	$('.banDel').fadeIn(200);
 	$('.banDel .delP1').text('检测到您尚未登录账号，5秒后将跳转登录页面，请您先登录账号!');
 	setTimeout(function(){
-		window.location.href = 'Login.html';
+		window.location.href = 'index.html';
 	},5000)
 }
 
@@ -28,7 +28,7 @@ $('.logOff').click(function(){
 	sessionStorage.removeItem('admin_id');
 	sessionStorage.removeItem('admin_HeadImg');
 	setTimeout(function(){
-		window.location.href = 'Login.html';
+		window.location.href = 'index.html';
 	},5000)
 })
 
@@ -85,54 +85,43 @@ $(".modifyEmail").blur(function() {
 
 //点击提交时判断输入框是否为空  执行Ajax修改客户信息
 $('.submit').on('click',function(){
-	if($('.modifyName').val() == '' || $('.modifySex').val() == '' || $('.modifyJob').val() == ''
-	|| $('.modifyWorks').val() == '' || $('.modifyTel').val() == '' || $('.modifyEmail').val() == ''
-	|| $('.modifyAge').val() == '' || $('.modifyBirthDate').val() == '' || $('.modifyHeight').val() == ''
-	|| $('.modifyWeight').val() == '' || $('.modifyMariteal').val() == '' || $('.modifyAddress').val() == ''
-	|| $('.modifyDepartment').val() == '' || $('.modifyInductionTime').val() == ''
-	|| $('.modifyCat').val() == '' || $('.modifyJobCategory').val() == ''){
-		console.log(
-			$('.modifyName').val(),
-			$('.modifySex').val(),
-			$('.modifyJob').val(),
-			$('.modifyWorks').val(),
-			$('.modifyTel').val(),
-			$('.modifyEmail').val(),
-			$('.modifyAge').val(),
-			$('.modifyBirthDate').val(),
-			$('.modifyHeight').val(),
-			$('.modifyWeight').val(),
-			$('.modifyMariteal').val(),
-			$('.modifyAddress').val(),
-			$('.modifyDepartment').val(),
-			$('.modifyInductionTime').val(),
-			$('.modifyCat').val(),
-			$('.modifyJobCategory').val()
-		)
-		alert('信息不能为空，请填写完整！');
-	}else{
-		if($('.baBody .title_content #pic img').attr('src') == '../upload/huaji.jpg'){
-			var defaultImgSrc = 'huaji.jpg';
-			addInfo(defaultImgSrc);
+	//判断登陆者是否是超级管理员
+	if(sessionStorage.admin_id == '1'){
+		if($('.modifyName').val() == '' || $('.modifyJob').val() == ''
+		|| $('.modifyTel').val() == '' || $('.modifyEmail').val() == ''
+		|| $('.modifyAge').val() == '' || $('.modifyBirthDate').val() == '' || $('.modifyHeight').val() == ''
+		|| $('.modifyWeight').val() == '' || $('.modifyMariteal').val() == '' || $('.modifyAddress').val() == ''
+		|| $('.modifyInductionTime').val() == ''){
+			$('.banDel').fadeIn(200);
+			$('.banDel .delP1').text('信息不能为空，请填写完整！');
 		}else{
-			console.log(_file);
-			var fd = new FormData();
-			fd.append('uploadFile',_file);
-			$.ajax({
-				type:"post",
-				url:"http://localhost:1967/upload/uploadImg",
-				data:fd,
-				contentType:false,//表示要传一个文件
-				processData:false,//对data参数进行序列化处理
-				success:function(dataImg){
-					console.log(dataImg);
-					addInfo(dataImg);
-				},
-				error:function(){
-					console.log('上传失败');
-				}
-			});
+			if($('.baBody .title_content #pic img').attr('src') == '../upload/huaji.jpg'){
+				var defaultImgSrc = 'huaji.jpg';
+				addInfo(defaultImgSrc);
+			}else{
+				console.log(_file);
+				var fd = new FormData();
+				fd.append('uploadFile',_file);
+				$.ajax({
+					type:"post",
+					url:"http://localhost:1967/upload/uploadImg",
+					data:fd,
+					contentType:false,//表示要传一个文件
+					processData:false,//对data参数进行序列化处理
+					success:function(dataImg){
+						console.log(dataImg);
+						addInfo(dataImg);
+					},
+					error:function(){
+						$('.banDel').fadeIn(200);
+						$('.banDel .delP1').text('error,新增失败！');
+					}
+				});
+			}
 		}
+	}else{
+		$('.banDel').fadeIn(200);
+		$('.banDel .delP1').text('您不是超级管理员，无权操作数据!');
 	}
 })
 
@@ -143,9 +132,8 @@ function addInfo(HeadPortrait){
 		url: "http://localhost:1967/AddInfo/add",
 		data:{
 			'modifyName':$('.modifyName').val(),
-			'modifySex':$('.modifySex').val(),
+			'modifySex':$('.about li .userSex input[type=radio]:checked').val(),
 			'modifyJob':$('.modifyJob').val(),
-			'modifyWorks':$('.modifyWorks').val(),
 			'modifyTel':$('.modifyTel').val(),
 			'modifyEmail':$('.modifyEmail').val(),
 			'modifyAge':$('.modifyAge').val(),
@@ -154,28 +142,28 @@ function addInfo(HeadPortrait){
 			'modifyWeight':$('.modifyWeight').val(),
 			'modifyMariteal':$('.modifyMariteal').val(),
 			'modifyAddress':$('.modifyAddress').val(),
-			'modifyDepartment':$('.modifyDepartment').val(),
+			'modifyDepartment':$(".selectLine").find("option:selected").text(),
 			'modifyInductionTime':$('.modifyInductionTime').val(),
-			'modifyCat':$('.modifyCat').val(),
-			'modifyJobCategory':$('.modifyJobCategory').val(),
+			'modifyCat':$('.about li .userCat input[type=radio]:checked').val(),
+			'modifyJobCategory':$('.about li .userJobCategory input[type=radio]:checked').val(),
 			'upImg':HeadPortrait
 		},
 		success: function(data) {//前端访问后台数据
 			console.log(data);
 			if(data.flag == 1){
-				var r = confirm("新增成功！")
-			  	if(r == true){
-			    	window.location.href = 'Customer-information.html';
-			   	}else{
-				    window.location.href = 'Customer-information.html';
-			    }
-				sessionStorage.removeItem('Custid');
+				$('.banDel').fadeIn(200);
+				$('.banDel .delP1').text('新增成功！');
+				setTimeout(function(){
+					window.location.href = 'Customer-information.html';
+				},2000)
 			}else{
-				alert('新增失败！');
+				$('.banDel').fadeIn(200);
+				$('.banDel .delP1').text('新增失败！');
 			}
 		},
 		error: function() {
-			console.log('error');
+			$('.banDel').fadeIn(200);
+			$('.banDel .delP1').text('error,新增失败！');
 		}
 	});
 }

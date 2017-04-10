@@ -10,7 +10,7 @@ var pool = mysql.createPool({
 	host:'localhost',//ip地址
 	user: 'root',//数据库用户名
 	password: '1992',//数据库密码
-	database:'zsl',//数据库名
+	database:'information',//数据库名
 	port:3306//端口号 
 });
 
@@ -59,6 +59,7 @@ router.post('/register',function(req,res){
         admin_Tel = req.body['tel'],//向前台请求的电话
         admin_Email = req.body['email'],//向前台请求的年龄
         upImg = req.body.upImg;//向前台请求的头像
+        
 	getAdmin([admin_Name], function(err, result, connection){
 		connection.release();
 		//console.log(result.length);
@@ -84,7 +85,7 @@ router.post('/register',function(req,res){
 router.post('/Login',function(req,res){
     var adminName = req.body['adminName'],//向前台请求的用户名
         adminPwd = req.body['adminPwd'];//向前台请求的密码
-	
+        
 	getAdmin([adminName], function(err, result, connection){
 		connection.release();
 		if(result.length == 0){

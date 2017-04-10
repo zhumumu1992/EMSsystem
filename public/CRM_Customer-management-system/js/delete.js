@@ -10,13 +10,13 @@ if(sessionStorage.admin_name){
 	});
 }else{
 	$('.profile_details>ul').hide();
-	var str = '<div class="user-name"><a href="Login.html" class="userName">未登录，请登录！</a><span>Administrator</span></div>';
+	var str = '<div class="user-name"><a href="index.html" class="userName">未登录，请登录！</a><span>Administrator</span></div>';
 	$('.profile_details').append(str);
 	$('.user-name').css('width','100%');
 	$('.banDel').fadeIn(200);
 	$('.banDel .delP1').text('检测到您尚未登录账号，5秒后将跳转登录页面，请您先登录账号!');
 	setTimeout(function(){
-		window.location.href = 'Login.html';
+		window.location.href = 'index.html';
 	},5000)
 }
 
@@ -28,7 +28,7 @@ $('.logOff').click(function(){
 	sessionStorage.removeItem('admin_id');
 	sessionStorage.removeItem('admin_HeadImg');
 	setTimeout(function(){
-		window.location.href = 'Login.html';
+		window.location.href = 'index.html';
 	},5000)
 })
 
@@ -72,9 +72,9 @@ function getThisPage(page){
 				'<td class="col-md-1">'+sliceArr[i].username+'</td>'+
 				'<td class="col-md-1">'+sliceArr[i].sex+'</td>'+
 				'<td class="col-md-1">'+sliceArr[i].job+'</td>'+
-				'<td class="col-md-4">'+sliceArr[i].works+'</td>'+
-				'<td class="col-md-4"><a href="ViewDetails.html?thisId='+sliceArr[i].id+'" class="btn btn-primary btn-sm">查看详情</a>'+
-				'<a href="javascript:;" class="btn btn-primary btn-sm recovery" thisId='+sliceArr[i].id+'>还原</a>'+
+				'<td class="col-md-1">'+sliceArr[i].department+'</td>'+
+				'<td class="col-md-2"><a href="ViewDetails.html?thisId='+sliceArr[i].id+'" class="btn btn-primary btn-sm">查看详情</a>'+
+				'<a href="javascript:;" class="btn btn-primary btn-sm recovery" thisId='+sliceArr[i].id+'>恢复</a>'+
 				'<a href="javascript:;" class="btn btn-primary btn-sm RemoveCompletely" thisId="'+sliceArr[i].id+'">彻底删除</a></td></tr>';
 			}
 			$('.table tbody').append(str);
@@ -133,16 +133,15 @@ $(".selectLine").change(function(){
 			$(".table tbody tr").remove();//跳转到下一页时清空tbody，避免叠加DOM树。
 			var str = '';
 			for(var i = 0; i < data.length; i++){
-				str += '<tr><td class="col-md-1"><img src="../upload/'+data[i].HeadPortrait
-					+'"/></td><td class="col-md-1">'+data[i].id
-					+'</td><td class="col-md-1">'+data[i].username
-					+'</td><td class="col-md-1">'+data[i].sex
-					+'</td><td class="col-md-1">'+data[i].job
-					+'</td><td class="col-md-4">'+data[i].works
-					+'</td><td class="col-md-4"><a href="ViewDetails.html?thisId='+data[i].id
-					+'" class="btn btn-primary btn-sm">查看详情</a><a href="ModifyInformation.html?thisId='+data[i].id
-					+'" class="btn btn-primary btn-sm">修改信息</a><a href="javascript:;" class="btn btn-primary btn-sm deleteData" thisId="'+data[i].id
-					+'">删除数据</a></td></tr>';
+				str += '<tr><td class="col-md-1"><img src="../upload/'+data[i].HeadPortrait+'"/></td>'+
+				'<td class="col-md-1">'+data[i].id+'</td>'+
+				'<td class="col-md-1">'+data[i].username+'</td>'+
+				'<td class="col-md-1">'+data[i].sex+'</td>'+
+				'<td class="col-md-1">'+data[i].job+'</td>'+
+				'<td class="col-md-1">'+data[i].department+'</td>'+
+				'<td class="col-md-2"><a href="ViewDetails.html?thisId='+data[i].id+'" class="btn btn-primary btn-sm">查看详情</a>'+
+				'<a href="javascript:;" class="btn btn-primary btn-sm recovery" thisId='+data[i].id+'>还原</a>'+
+				'<a href="javascript:;" class="btn btn-primary btn-sm RemoveCompletely" thisId="'+data[i].id+'">彻底删除</a></td></tr>';
 			}
 			$('.table tbody').append(str);
 		},
@@ -157,7 +156,7 @@ $(".selectLine").change(function(){
 $('.table').delegate('.recovery','click',function(){
 	var thisId = $(this).attr('thisId');
 	$('.banDel').fadeIn(200);
-	$('.banDel .delP1').text('确认要还原该条客户信息数据？');
+	$('.banDel .delP1').text('确认要恢复该条客户信息数据？');
 	$('.yes').on('click',function(){
 		$.ajax({
 			type:"get",

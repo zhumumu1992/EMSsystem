@@ -4,7 +4,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-		<title>注册 - CRM客户管理系统</title>
+		<title>注册 - EMS员工管理系统</title>
 		<!--标题Ico图标-->
 		<link rel="icon" type="text/css" href="img/crmIco.ico"/>
 		<script src="js/jquery-2.1.4.min.js"></script>
@@ -26,7 +26,7 @@
 			    )
 			</script>
 			<div class="register-container">
-				<h1>欢迎注册使用CRM客户管理系统</h1>
+				<h1>欢迎注册使用EMS员工管理系统</h1>
 				<div class="connect">
 					<p>Link the world. Share to world.</p>
 				</div>
@@ -61,7 +61,7 @@
 
 					<button id="submit" type="submit">注 册</button>
 				</form>
-				<a href="Login.html">
+				<a href="index.html">
 					<button type="button" class="register-tis">已经有账号？</button>
 				</a>
 
@@ -141,7 +141,7 @@
 								url:"http://localhost:1967/userRegister/register",
 								data:{
 									username:$('.username').val(),//注册管理员的用户名
-									pasword:$('.password').val(),//注册管理员的密码
+									pasword:MD5($('.password').val()),//注册管理员的密码
 									tel:$('.phone_number').val(),//注册管理员的电话
 									email:$('.email').val(),//注册管理员的邮箱
 									sex:$('input[type=radio]:checked').val(),//注册管理员的性别
@@ -151,9 +151,8 @@
 									if(e.flag == 1){//注册成功
 										$('.banDel').fadeIn(200);
 										$('.banDel .delP1').text('恭喜您，注册成功!');
-										sessionStorage.user_name = $('.username').val();
 										setTimeout(function(){
-											window.location.href = 'Login.html';
+											window.location.href = 'index.html';
 										},2000)
 									}else if(e.flag == 2){//用户名已有
 										$('.banDel').fadeIn(200);

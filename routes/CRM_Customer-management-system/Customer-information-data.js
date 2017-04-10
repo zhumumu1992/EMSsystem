@@ -9,7 +9,7 @@ var pool = mysql.createPool({
 	host:'localhost',//ip地址
 	user: 'root',//数据库用户名
 	password: '1992',//数据库密码
-	database:'zsl',//数据库名
+	database:'information',//数据库名
 	port:3306//端口号 
 });
 
@@ -74,15 +74,6 @@ router.post('/SignOut', function(req, res) {
 	res.send({flag:1});//已清除
 });
 
-//分页功能，封装一个公共的方法
-function getPage(param, callback, sql){
-	pool.getConnection(function(err,connection){
-		var sqlFun = sql;
-		connection.query(sqlFun, param, function(err, result){
-			callback(err, result, connection);
-		})
-	})
-}
 
 //第一版本分页
 //router.get('/paging', function(req, res) {
@@ -110,7 +101,7 @@ function getPage(param, callback, sql){
 router.get('/paging', function(req, res) {
 	var thisPage = req.query.thisPage,
 		total = 0;
-	getPage([0],function(err,result,connection){
+	getAdmin([0],function(err,result,connection){
 		connection.release();
 		total = result.length;
 		if(err){
@@ -122,7 +113,7 @@ router.get('/paging', function(req, res) {
 			pageSize = 8;
 			totalPage = Math.ceil(total/pageSize);
 			startPage = pageSize * (thisPage-1);
-			getPage([0, startPage, pageSize],function(err,result,connection){
+			getAdmin([0, startPage, pageSize],function(err,result,connection){
 				connection.release();
 				res.send({
 					total:total,//数据总数量
@@ -176,7 +167,6 @@ router.post('/modify',function(req,res){
 		modifyName = req.body.modifyName,
 		modifySex = req.body.modifySex,
 		modifyJob = req.body.modifyJob,
-		modifyWorks = req.body.modifyWorks,
 		modifyTel = req.body.modifyTel,
 		modifyEmail = req.body.modifyEmail,
 		modifyAge = req.body.modifyAge,
@@ -196,7 +186,7 @@ router.post('/modify',function(req,res){
 		connection.release();
 		//console.log(result.length,modifyID);
 		if(result.length > 0){
-			getAdmin([modifyName, modifySex, modifyAge, modifyBirthDate, modifyHeight, modifyWeight, modifyJob, modifyWorks, modifyMariteal, modifyAddress, modifyTel, modifyEmail, modifyDepartment, modifyInductionTime, modifyCat, modifyJobCategory, modifyID], function(err, result, connection){
+			getAdmin([modifyName, modifySex, modifyAge, modifyBirthDate, modifyHeight, modifyWeight, modifyJob, modifyMariteal, modifyAddress, modifyTel, modifyEmail, modifyDepartment, modifyInductionTime, modifyCat, modifyJobCategory, modifyID], function(err, result, connection){
 				connection.release();
 				console.log(result);
 				if(result.changedRows > 0){
@@ -204,7 +194,7 @@ router.post('/modify',function(req,res){
 				}else{
 					res.send({flag:3})//修改失败
 				}
-			},'update useinfo set username=?,sex=?,age=?,BirthDate=?,height=?,weight=?,job=?,works=?,MaritalStatus=?,address=?,tel=?,email=?,department=?,InductionTime=?,cat=?,JobCategory=? where id=?');
+			},'update useinfo set username=?,sex=?,age=?,BirthDate=?,height=?,weight=?,job=?,MaritalStatus=?,address=?,tel=?,email=?,department=?,InductionTime=?,cat=?,JobCategory=? where id=?');
 		}else if(result.length == 0){
 			res.send({flag:2})//数据不存在
 		}
@@ -250,7 +240,6 @@ router.post('/add',function(req,res){
 		modifyHeight = req.body.modifyHeight,
 		modifyWeight = req.body.modifyWeight,
 		modifyJob = req.body.modifyJob,
-		modifyWorks = req.body.modifyWorks,
 		modifyMariteal = req.body.modifyMariteal,
 		modifyAddress = req.body.modifyAddress,
 		modifyTel = req.body.modifyTel,
@@ -261,14 +250,14 @@ router.post('/add',function(req,res){
 		modifyJobCategory = req.body.modifyJobCategory,
 		upImg = req.body.upImg;
 		
-	getAdmin([modifyName, modifySex, modifyAge, upImg, modifyBirthDate, modifyHeight, modifyWeight, modifyJob, modifyWorks, modifyMariteal, modifyAddress, modifyTel, modifyEmail, modifyDepartment, modifyInductionTime, modifyCat, modifyJobCategory], function(err, result, connection){
+	getAdmin([modifyName, modifySex, modifyAge, upImg, modifyBirthDate, modifyHeight, modifyWeight, modifyJob, modifyMariteal, modifyAddress, modifyTel, modifyEmail, modifyDepartment, modifyInductionTime, modifyCat, modifyJobCategory], function(err, result, connection){
 		connection.release();
 		if(result.affectedRows > 0){
 			res.send({flag:1})//新增成功
 		}else{
 			res.send({flag:2})//新增失败
 		}
-	},'insert into useinfo(username,sex,age,HeadPortrait,BirthDate,height,weight,job,works,MaritalStatus,address,tel,email,department,InductionTime,cat,JobCategory,deleteInfo) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,0)');
+	},'insert into useinfo(username,sex,age,HeadPortrait,BirthDate,height,weight,job,MaritalStatus,address,tel,email,department,InductionTime,cat,JobCategory,deleteInfo) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,0)');
 })
 
 
@@ -276,7 +265,7 @@ router.post('/add',function(req,res){
 router.post('/searchResult',function(req,res){
 	var SearchName = req.body.keyword_name;
 	pool.getConnection(function(err,connection){
-		var getDatabase_Sql = 'select * from useinfo where concat(username,sex,age,HeadPortrait,BirthDate,height,weight,job,works,MaritalStatus,address,tel,email,department,InductionTime,cat,JobCategory) like "%" ? "%"';
+		var getDatabase_Sql = 'select * from useinfo where concat(username,sex,age,HeadPortrait,BirthDate,height,weight,job,MaritalStatus,address,tel,email,department,InductionTime,cat,JobCategory) like "%" ? "%"';
 		connection.query(getDatabase_Sql, [SearchName], function(err,result){
 			connection.release();
 			res.send(result);
@@ -388,6 +377,55 @@ router.get('/ConfirmDelete',function(req,res){
 		}
 	},'delete from useinfo where id=?');
 })
+
+//主页日常工作安排表——获取数据
+router.get('/getWorkSchedule',function(req,res){
+	pool.getConnection(function(err,connection){
+		var get_Sql = 'select * from workSchedule';
+		connection.query(get_Sql, function(err,result){
+			connection.release();
+			res.send(result);
+		})
+	})
+})
+
+//主页日常工作安排表——添加事项
+router.get('/NewItems',function(req,res){
+	var PersonInCharge = req.query.PersonInCharge,
+		JobContent = req.query.JobContent,
+		time = req.query.time;
+	getAdmin([PersonInCharge, JobContent, time], function(err, result, connection){
+		connection.release();
+		if(result.affectedRows > 0){
+			res.send({flag:1})//新增事项成功
+		}else{
+			res.send({flag:2})//新增事项失败
+		}
+	},'insert into workSchedule(PersonInCharge, JobContent, time) values(?,?,?)');
+})
+
+//彻底删除日常工作安排表
+router.get('/deleteThisWork',function(req,res){
+	var deleteID = req.query.id;
+	getAdmin([deleteID],function(err,result,connection){
+		connection.release();
+		console.log(result);
+		if(result.affectedRows > 0){
+			res.send({flag:1});//删除事项成功
+		}else{
+			res.send({flag:2});//删除事项失败
+		}
+	},'delete from workSchedule where id=?');
+})
+
+
+
+
+
+
+
+
+
 
 
 module.exports = router;

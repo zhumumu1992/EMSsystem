@@ -2,7 +2,7 @@
 <html>
 
 	<head>
-		<title>主页 - CRM客户管理系统</title>
+		<title>主页 - EMS员工管理系统</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta charset="UTF-8">
 		<!--标题Ico图标-->
@@ -12,11 +12,13 @@
 		<!--自定义CSS-->
 		<link rel="stylesheet" type="text/css" href="css/style.css"/>
 		<!--小图标CSS-->
-		<link href="css/font-awesome.css" rel="stylesheet">
-		<link rel="stylesheet" href="css/icon-font.min.css" type='text/css' />
+		<link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+		<link rel="stylesheet" href="https://cdn.linearicons.com/free/1.0.0/icon-font.min.css">
 		<!--标题添加延迟效果-->
 		<link href="css/animate.css" rel="stylesheet" type="text/css" media="all">
 		<script src="js/jquery-1.10.2.min.js"></script>
+		<!--设置年月日星期-->
+		<script src="js/moment.min.js"></script>
 	</head>
 
 	<body class="sticky-header left-side-collapsed">
@@ -37,10 +39,10 @@
 		<div class="left-side sticky-left-side">
 			<!--logo-->
 			<div class="logo">
-				<h1><a href="index.html">欢迎您 <span>Admin</span></a></h1>
+				<h1><a href="home.html">欢迎您 <span>Admin</span></a></h1>
 			</div>
 			<!--主页按钮小图标-->
-			<div class="logo-icon text-center">
+			<div class="logo-icon text-center active">
 				<a href="home.html"><i class="lnr lnr-home" title="主页"></i> </a>
 			</div>
 			<!--下面的跳转分页按钮-->
@@ -51,19 +53,19 @@
 						<a href="Customer-information.html"><i class="lnr lnr-users" title="客户信息"></i> <span>客户信息</span></a>
 					</li>
 					<li>
-						<a href="Piechart.html"><i class="lnr lnr-pie-chart" title="饼状图"></i> <span>饼状图</span></a>
+						<a href="Piechart.html"><i class="lnr lnr-pie-chart" title="年龄区间统计"></i> <span>年龄区间统计</span></a>
 					</li>
 					<li class="menu-list">
-						<a href="BarLineChart.html"><i class="lnr lnr-chart-bars" title="柱线图"></i> <span>柱线图</span></a>
+						<a href="BarLineChart.html"><i class="lnr lnr-chart-bars" title="年龄身高体重统计"></i> <span>年龄身高体重统计</span></a>
 					</li>
 					<li class="menu-list">
-						<a href="Piechart2.html"><i class="lnr lnr-pie-chart" title="饼状图"></i> <span>饼状图</span></a>
+						<a href="Piechart2.html"><i class="lnr lnr-pie-chart" title="所在部门统计"></i> <span>所在部门统计</span></a>
 					</li>
 					<li>
-						<a href="bar_Average.html"><i class="lnr lnr-chart-bars" title="柱状图"></i> <span>柱状图</span></a>
+						<a href="bar_Average.html"><i class="lnr lnr-chart-bars" title="平均身高体重统计"></i> <span>平均身高体重统计</span></a>
 					</li>
 					<li>
-						<a href="Piechart3.html"><i class="lnr lnr-chart-bars" title="柱状图"></i> <span>柱状图</span></a>
+						<a href="Bar3.html"><i class="lnr lnr-chart-bars" title="平均年龄统计"></i> <span>平均年龄统计</span></a>
 					</li>
 					<li>
 						<a href="delete.html"><i class="lnr lnr-trash" title="回收站"></i> <span>回收站</span></a>
@@ -270,7 +272,7 @@
 						</div>
 						<!--时钟-->
 						<script>
-							$(document).ready(function() {
+							$(function() {
 								setInterval(function() {
 									// 创建一个对象，并提取newDate（）在访问者的当前时间的秒
 									var seconds = new Date().getSeconds();
@@ -289,9 +291,22 @@
 									// 添加前导零的小时值
 									$("#hours").html((hours < 10 ? "0" : "") + hours);
 								}, 1000);
-							});
+								
+								//设置年月日星期
+								var weekday = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+								(function update_time() {
+									//调用moment.js来格式化时间
+									var now = moment().format("HHmmss");
+									var date = moment().format("YYYY年MM月DD日");
+									var week = weekday[moment().format('d')];
+									$(".date").html(date + ' ' + week);
+									// 每秒钟运行一次
+									setTimeout(update_time, 1000);
+								})();
+							})
 						</script>
 						<div class="clock">
+							<span class="date"></span>
 							<ul>
 								<li id="hours"> </li>
 								<li id="point">:</li>
@@ -368,84 +383,22 @@
 					</div>
 				</div>
 
-				<!--日程插件-->
+				<!--日常工作安排表-->
 				<div class="row" style="margin-top: 30px;">
-					<div class="col-lg-7">
+					<div class="col-lg-8">
 						<section class="panel">
 							<div class="panel_body">
 								<div class="text-center mbot30">
 									<h3 class="timeline-title">Ministry of Personnel</h3>
 									<p class="t-info">日常工作安排表</p>
+									<div class="input-group">
+                                        <input type="text" placeholder="负责人员" class="input-sm form-control PersonInCharge">
+                                        <input type="text" placeholder="工作内容" class="input-sm form-control JobContent">
+                                    	<a href="javascript:;" class="btn btn-primary btn-sm NewItems">新增事项</a>
+                                    </div>
 								</div>
 								<div class="timeline">
-									<article class="timeline-item">
-										<div class="timeline-desk">
-											<div class="panel">
-												<div class="panel_body">
-													<span class="arrow"></span>
-													<span class="timeline-icon red"></span>
-													<span class="timeline-date">8:25 am</span>
-													<h1 class="red">董菲菲、崔婷婷</h1>
-													<p>考核，考勤，视察，安排.</p>
-												</div>
-											</div>
-										</div>
-									</article>
-									<article class="timeline-item alt">
-										<div class="timeline-desk">
-											<div class="panel">
-												<div class="panel_body">
-													<span class="arrow-alt"></span>
-													<span class="timeline-icon green"></span>
-													<span class="timeline-date">10:00 am</span>
-													<h1 class="green">杨春秀、崔婷婷</h1>
-													<p>查岗,核实当天请假、调休单的情况，并做好记录.</p>
-												</div>
-											</div>
-										</div>
-									</article>
-									<article class="timeline-item">
-										<div class="timeline-desk">
-											<div class="panel">
-												<div class="panel_body">
-													<span class="arrow"></span>
-													<span class="timeline-icon blue"></span>
-													<span class="timeline-date">11:20 am</span>
-													<h1 class="blue">董菲菲，崔婷婷配合</h1>
-													<p>接待时间，资料整理.</p>
-												</div>
-											</div>
-										</div>
-									</article>
-									<article class="timeline-item alt">
-										<div class="timeline-desk">
-											<div class="panel">
-												<div class="panel_body">
-													<span class="arrow-alt"></span>
-													<span class="timeline-icon purple"></span>
-													<span class="timeline-date">3:20 pm</span>
-													<h1 class="purple">以菲菲为主，婷婷配合</h1>
-													<p>部门例会,准备资料.</p>
-													<div class="notification">
-														<i class=" icon-exclamation-sign"></i> 例会会议记录,会议记录整理下发.
-													</div>
-												</div>
-											</div>
-										</div>
-									</article>
-									<article class="timeline-item">
-										<div class="timeline-desk">
-											<div class="panel">
-												<div class="panel_body">
-													<span class="arrow"></span>
-													<span class="timeline-icon light-green"></span>
-													<span class="timeline-date">05:00 pm</span>
-													<h1 class="light-green">杨春秀、崔婷婷</h1>
-													<p>日常考勤工作的整理和统计.</p>
-												</div>
-											</div>
-										</div>
-									</article>
+									
 								</div>
 								<div class="clearfix">&nbsp;</div>
 							</div>
@@ -455,7 +408,7 @@
 					<!--日期天气插件-->
 					<script src="js/jquery.min.js"></script>
 					<script src="js/jquery.leoweather.min.js"></script>
-					<div class="col-md-5 widget_middle_left">
+					<div class="col-md-4 widget_middle_left">
 						<div class="widget_middle_left_slider">
 							<div class="main-grid1-grids">
 								<div class="friday">
@@ -491,7 +444,7 @@
 		</div>
 
 		<!--弹出遮罩层-->
-		<div class="banDel">
+		<div class="banDel" style="z-index: 3;">
 			<div class="delete">
 				<div class="close">
 					<img src="img/shanchu.png">

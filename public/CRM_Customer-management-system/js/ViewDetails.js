@@ -10,13 +10,13 @@ if(sessionStorage.admin_name){
 	});
 }else{
 	$('.profile_details>ul').hide();
-	var str = '<div class="user-name"><a href="Login.html" class="userName">未登录，请登录！</a><span>Administrator</span></div>';
+	var str = '<div class="user-name"><a href="index.html" class="userName">未登录，请登录！</a><span>Administrator</span></div>';
 	$('.profile_details').append(str);
 	$('.user-name').css('width','100%');
 	$('.banDel').fadeIn(200);
 	$('.banDel .delP1').text('检测到您尚未登录账号，5秒后将跳转登录页面，请您先登录账号!');
 	setTimeout(function(){
-		window.location.href = 'Login.html';
+		window.location.href = 'index.html';
 	},5000)
 }
 
@@ -28,7 +28,7 @@ $('.logOff').click(function(){
 	sessionStorage.removeItem('admin_id');
 	sessionStorage.removeItem('admin_HeadImg');
 	setTimeout(function(){
-		window.location.href = 'Login.html';
+		window.location.href = 'index.html';
 	},5000)
 })
 
@@ -58,23 +58,22 @@ $.ajax({
 		var str = '<div class="mCSB_container"><h1 class="h-bloc">Personal profile</h1><div class="row top-p"><div class="col-md-7 profile-l">'+
 		'<div class="title_content"><div class="name">'+data.username+'<img src="../upload/'+data.HeadPortrait+'" class="HeadPortrait"></div></div>'+
 		'<ul class="about clear"><li><i class="fa fa-id-card" class="fa_Icon"></i><label>编号ID</label><span class="value">'+data.id+'</span></li>'+
-		'<li><i class="glyphicon glyphicon-user"></i><label>姓名</label><span class="value">'+data.username+'</span></li>'+
+		'<li><i class="fa fa-user-o"></i><label>姓名</label><span class="value">'+data.username+'</span></li>'+
 		'<li><i class="fa fa-male" class="fa_Icon" style="font-size: 24px;"></i>性别</label><span class="value">'+data.sex+'</span></li>'+
-		'<li><i class="fa fa-handshake-o" class="fa_Icon"></i><label>职业</label><span class="value">'+data.job+'</span></li>'+
-		'<li><i class="glyphicon glyphicon-folder-open"></i><label>优秀作品</label><span class="value">'+data.works+'</span></li>'+
-		'<li><i class="glyphicon glyphicon-earphone"></i><label>联系方式</label><span class="value">'+data.tel+'</span></li>'+
-		'<li><i class="glyphicon glyphicon-envelope"></i><label>邮箱</label><span class="value">'+data.email+'</span></li></ul>'+
+		'<li><i class="fa fa-handshake-o" class="fa_Icon"></i><label>职位</label><span class="value">'+data.job+'</span></li>'+
+		'<li><i class="fa fa-phone"></i><label>联系方式</label><span class="value">'+data.tel+'</span></li>'+
+		'<li><i class="fa fa-envelope-o"></i><label>邮箱</label><span class="value">'+data.email+'</span></li></ul>'+
 		'<div class="title_content"><div class="name">detailed information</div></div><ul class="about clear">'+
-		'<li><i class="fa fa-address-card" class="fa_Icon"></i><label>年龄</label><span class="value">'+data.age+'岁</span></li>'+
-		'<li><i class="glyphicon glyphicon-calendar"></i><label>出生日期</label><span class="value">'+data.BirthDate+'</span></li>'+
-		'<li><i class="fa fa-universal-access" class="fa_Icon"></i><label>身高</label><span class="value">'+data.height+'cm</span></li>'+
-		'<li><i class="fa fa-balance-scale" class="fa_Icon"></i><label>体重</label><span class="value">'+data.weight+'kg</span></li>'+
-		'<li><i class="glyphicon glyphicon-heart"></i><label>婚姻状况</label><span class="value">'+data.MaritalStatus+'</span></li>'+
-		'<li><i class="glyphicon glyphicon-map-marker"></i><label>住址</label><span class="value">'+data.address+'</span></li>'+
+		'<li><i class="fa fa-address-card" class="fa_Icon"></i><label>年龄</label><span class="value">'+data.age+' 岁</span></li>'+
+		'<li><i class="fa fa-history"></i><label>出生日期</label><span class="value">'+data.BirthDate+'</span></li>'+
+		'<li><i class="fa fa-universal-access" class="fa_Icon"></i><label>身高</label><span class="value">'+data.height+' cm</span></li>'+
+		'<li><i class="fa fa-balance-scale" class="fa_Icon"></i><label>体重</label><span class="value">'+data.weight+' kg</span></li>'+
+		'<li><i class="fa fa-heart"></i><label>婚姻状况</label><span class="value">'+data.MaritalStatus+'</span></li>'+
+		'<li><i class="fa fa-home"></i><label>住址</label><span class="value">'+data.address+'</span></li>'+
 		'<li><i class="fa fa-users" class="fa_Icon"></i><label>所在部门</label><span class="value">'+data.department+'</span></li>'+
-		'<li><i class="glyphicon glyphicon-time"></i><label>入职时间</label><span class="value">'+data.InductionTime+'</span></li>'+
-		'<li><i class="glyphicon glyphicon-tags"></i><label>工作状态</label><span class="value">'+data.cat+'</span></li>'+
-		'<li><i class="glyphicon glyphicon-paperclip"></i><label>岗位类别</label><span class="value">'+data.JobCategory+'</span></li></ul>'+
+		'<li><i class="fa fa-calendar"></i><label>入职时间</label><span class="value">'+data.InductionTime+'</span></li>'+
+		'<li><i class="fa fa-user-plus"></i><label>工作状态</label><span class="value">'+data.cat+'</span></li>'+
+		'<li><i class="fa fa-suitcase"></i><label>岗位类别</label><span class="value">'+data.JobCategory+'</span></li></ul>'+
 		'</div></div><a href="javascript:;" class="btn btn_5 btn-lg btn-primary goback" style="padding: 6px 30px; margin-left: 250px;">返回</a></div>';
 		$('.baBody').append(str);
 	},

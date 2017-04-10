@@ -10,13 +10,13 @@ if(sessionStorage.admin_name){
 	});
 }else{
 	$('.profile_details>ul').hide();
-	var str = '<div class="user-name"><a href="Login.html" class="userName">未登录，请登录！</a><span>Administrator</span></div>';
+	var str = '<div class="user-name"><a href="index.html" class="userName">未登录，请登录！</a><span>Administrator</span></div>';
 	$('.profile_details').append(str);
 	$('.user-name').css('width','100%');
 	$('.banDel').fadeIn(200);
 	$('.banDel .delP1').text('检测到您尚未登录账号，5秒后将跳转登录页面，请您先登录账号!');
 	setTimeout(function(){
-		window.location.href = 'Login.html';
+		window.location.href = 'index.html';
 	},5000)
 }
 
@@ -28,7 +28,7 @@ $('.logOff').click(function(){
 	sessionStorage.removeItem('admin_id');
 	sessionStorage.removeItem('admin_HeadImg');
 	setTimeout(function(){
-		window.location.href = 'Login.html';
+		window.location.href = 'index.html';
 	},5000)
 })
 
@@ -52,10 +52,10 @@ $.ajax({
 		var str = '<div class="mCSB_container"><h1 class="h-bloc">Personal profile</h1><div class="row top-p"><div class="col-md-7 profile-l">'+
 		'<div class="title_content"><div class="name">'+data.adminName+'<img src="../upload/'+data.adminHeadPortrait+'" class="HeadPortrait"></div></div>'+
 		'<ul class="about clear"><li><i class="fa fa-id-card" class="fa_Icon"></i><label>编号ID</label><span class="value">'+data.id+'</span></li>'+
-		'<li><i class="glyphicon glyphicon-user"></i><label>姓名</label><span class="value">'+data.adminName+'</span></li>'+
+		'<li><i class="fa fa-user-o"></i><label>姓名</label><span class="value">'+data.adminName+'</span></li>'+
 		'<li><i class="fa fa-male" class="fa_Icon" style="font-size: 24px;"></i>性别</label><span class="value">'+data.adminSex+'</span></li>'+
-		'<li><i class="glyphicon glyphicon-earphone"></i><label>联系方式</label><span class="value">'+data.adminTel+'</span></li>'+
-		'<li><i class="glyphicon glyphicon-envelope"></i><label>邮箱</label><span class="value">'+data.adminEmail+'</span></li></ul>'+
+		'<li><i class="fa fa-phone"></i><label>联系方式</label><span class="value">'+data.adminTel+'</span></li>'+
+		'<li><i class="fa fa-envelope-o"></i><label>邮箱</label><span class="value">'+data.adminEmail+'</span></li></ul>'+
 		'</div></div><a href="javascript:;" class="btn btn_5 btn-lg btn-primary goback" style="padding: 6px 30px;">返回</a></div>';
 		$('.baBody').append(str);
 	},

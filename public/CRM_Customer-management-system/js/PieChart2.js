@@ -10,13 +10,13 @@ if(sessionStorage.admin_name){
 	});
 }else{
 	$('.profile_details>ul').hide();
-	var str = '<div class="user-name"><a href="Login.html" class="userName">未登录，请登录！</a><span>Administrator</span></div>';
+	var str = '<div class="user-name"><a href="index.html" class="userName">未登录，请登录！</a><span>Administrator</span></div>';
 	$('.profile_details').append(str);
 	$('.user-name').css('width','100%');
 	$('.banDel').fadeIn(200);
 	$('.banDel .delP1').text('检测到您尚未登录账号，5秒后将跳转登录页面，请您先登录账号!');
 	setTimeout(function(){
-		window.location.href = 'Login.html';
+		window.location.href = 'index.html';
 	},5000)
 }
 
@@ -28,7 +28,7 @@ $('.logOff').click(function(){
 	sessionStorage.removeItem('admin_id');
 	sessionStorage.removeItem('admin_HeadImg');
 	setTimeout(function(){
-		window.location.href = 'Login.html';
+		window.location.href = 'index.html';
 	},5000)
 })
 

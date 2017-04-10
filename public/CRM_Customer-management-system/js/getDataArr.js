@@ -10,26 +10,26 @@ if(sessionStorage.admin_name){
 	});
 }else{
 	$('.profile_details>ul').hide();
-	var str = '<div class="user-name"><a href="Login.html" class="userName">未登录，请登录！</a><span>Administrator</span></div>';
+	var str = '<div class="user-name"><a href="index.html" class="userName">未登录，请登录！</a><span>Administrator</span></div>';
 	$('.profile_details').append(str);
 	$('.user-name').css('width','100%');
 	$('.banDel').fadeIn(200);
 	$('.banDel .delP1').text('检测到您尚未登录账号，5秒后将跳转登录页面，请您先登录账号!');
 	setTimeout(function(){
-		window.location.href = 'Login.html';
+		window.location.href = 'index.html';
 	},3000)
 }
 
 //点击注销账号
 $('.logOff').click(function(){
 	$('.banDel').fadeIn(200);
-	$('.banDel .delP1').text('已成功退出，3秒后将跳转登录页面!');
+	$('.banDel .delP1').text('已成功退出!');
 	sessionStorage.removeItem('admin_name');
 	sessionStorage.removeItem('admin_id');
 	sessionStorage.removeItem('admin_HeadImg');
 	setTimeout(function(){
-		window.location.href = 'Login.html';
-	},3000)
+		window.location.href = 'index.html';
+	},2000)
 })
 
 
@@ -71,8 +71,8 @@ function getThisPage(page){
 					+'</td><td class="col-md-1">'+sliceArr[i].username
 					+'</td><td class="col-md-1">'+sliceArr[i].sex
 					+'</td><td class="col-md-1">'+sliceArr[i].job
-					+'</td><td class="col-md-4">'+sliceArr[i].works
-					+'</td><td class="col-md-4"><a href="ViewDetails.html?thisId='+sliceArr[i].id
+					+'</td><td class="col-md-1">'+sliceArr[i].department
+					+'</td><td class="col-md-2"><a href="ViewDetails.html?thisId='+sliceArr[i].id
 					+'" class="btn btn-primary btn-sm">查看详情</a><a href="ModifyInformation.html?thisId='+sliceArr[i].id
 					+'" class="btn btn-primary btn-sm ModifyBtn">修改信息</a><a href="javascript:;" class="btn btn-primary btn-sm deleteData" thisId="'+sliceArr[i].id
 					+'">删除数据</a></td></tr>';
@@ -83,7 +83,8 @@ function getThisPage(page){
 			getPageData();
 		},
 		error: function() {
-			console.log('数据加载失败!');
+			$('.banDel').fadeIn(200);
+			$('.banDel .delP1').text('数据加载失败！');
 		}
 	});
 }
@@ -133,51 +134,58 @@ $(".selectLine").change(function(){
 			$(".table tbody tr").remove();//跳转到下一页时清空tbody，避免叠加DOM树。
 			var str = '';
 			for(var i = 0; i < data.length; i++){
-				str += '<tr><td class="col-md-1"><img src="../upload/'+data[i].HeadPortrait
-					+'"/></td><td class="col-md-1">'+data[i].id
-					+'</td><td class="col-md-1">'+data[i].username
-					+'</td><td class="col-md-1">'+data[i].sex
-					+'</td><td class="col-md-1">'+data[i].job
-					+'</td><td class="col-md-4">'+data[i].works
-					+'</td><td class="col-md-4"><a href="ViewDetails.html?thisId='+data[i].id
-					+'" class="btn btn-primary btn-sm">查看详情</a><a href="ModifyInformation.html?thisId='+data[i].id
-					+'" class="btn btn-primary btn-sm">修改信息</a><a href="javascript:;" class="btn btn-primary btn-sm deleteData" thisId="'+data[i].id
-					+'">删除数据</a></td></tr>';
+				str += '<tr><td class="col-md-1"><img src="../upload/'+data[i].HeadPortrait+'"/></td>'+
+				'<td class="col-md-1">'+data[i].id+'</td>'+
+				'<td class="col-md-1">'+data[i].username+'</td>'+
+				'<td class="col-md-1">'+data[i].sex+'</td>'+
+				'<td class="col-md-1">'+data[i].job+'</td>'+
+				'<td class="col-md-1">'+data[i].department+'</td>'+
+				'<td class="col-md-2"><a href="ViewDetails.html?thisId='+data[i].id+'" class="btn btn-primary btn-sm">查看详情</a>'+
+				'<a href="ModifyInformation.html?thisId='+data[i].id+'" class="btn btn-primary btn-sm ModifyBtn">修改信息</a>'+
+				'<a href="javascript:;" class="btn btn-primary btn-sm deleteData" thisId="'+data[i].id+'">删除数据</a></td></tr>';
 			}
 			$('.table tbody').append(str);
 		},
 		error: function() {
-			console.log('失败');
+			$('.banDel').fadeIn(200);
+			$('.banDel .delP1').text('error,选择失败！');
 		}
 	});
 })
 
 //点击删除当前这条客户信息数据
 $('.table').delegate('.deleteData','click',function(){
-	var thisID = $(this).attr('thisId');
-	$('.banDel').fadeIn(200);
-	$('.banDel .delP1').text('确认要删除该条客户信息数据？');
-	$('.yes').on('click',function(){
-		$.ajax({
-			type:"get",
-			url:"http://localhost:1967/deleteCustomerInfo/delete",
-			data:{
-				id:thisID
-			},
-			success:function(data){
-				if(data.flag == 1){
-					$('.banDel').fadeOut(100);
-				    window.location.reload();
-				}else{
+	//判断登陆者是否是超级管理员
+	if(sessionStorage.admin_id == '1'){
+		var thisID = $(this).attr('thisId');
+		$('.banDel').fadeIn(200);
+		$('.banDel .delP1').text('确认要删除该条客户信息数据？');
+		$('.yes').on('click',function(){
+			$.ajax({
+				type:"get",
+				url:"http://localhost:1967/deleteCustomerInfo/delete",
+				data:{
+					id:thisID
+				},
+				success:function(data){
+					if(data.flag == 1){
+						$('.banDel').fadeOut(100);
+					    window.location.reload();
+					}else{
+						$('.banDel').fadeIn(200);
+						$('.banDel .delP1').text('删除失败!');
+					}
+				},
+				error:function(){
 					$('.banDel').fadeIn(200);
-					$('.banDel .delP1').text('删除失败!');
+					$('.banDel .delP1').text('error,删除失败！');
 				}
-			},
-			error:function(){
-				console.log('error');
-			}
-		});
-	})
+			});
+		})
+	}else{
+		$('.banDel').fadeIn(200);
+		$('.banDel .delP1').text('您不是超级管理员，无权操作数据!');
+	}
 })
 
 //点击跳转到添加新信息页面
@@ -210,11 +218,12 @@ document.onkeydown = function(e){
 
 //封装搜索功能Ajax
 function search(){
+	var trimValue = $('.search-input').val().replace(/\ +/g,"");//去掉字符串前后空格
 	$.ajax({
 		type:"post",
 		url:"http://localhost:1967/search/searchResult",
 		data:{
-			keyword_name:$('.search-input').val()
+			keyword_name:trimValue
 		},
 		success:function(data){
 			console.log(data);
@@ -226,10 +235,10 @@ function search(){
 				+'</td><td class="col-md-1">'+data[i].username
 				+'</td><td class="col-md-1">'+data[i].sex
 				+'</td><td class="col-md-1">'+data[i].job
-				+'</td><td class="col-md-4">'+data[i].works
-				+'</td><td class="col-md-4"><a href="ViewDetails.html?thisId='+data[i].id
+				+'</td><td class="col-md-1">'+data[i].department
+				+'</td><td class="col-md-2"><a href="ViewDetails.html?thisId='+data[i].id
 				+'" class="btn btn-primary btn-sm">查看详情</a><a href="ModifyInformation.html?thisId='+data[i].id
-				+'" class="btn btn-primary btn-sm">修改信息</a><a href="javascript:;" class="btn btn-primary btn-sm deleteData" thisId="'+data[i].id
+				+'" class="btn btn-primary btn-sm ModifyBtn">修改信息</a><a href="javascript:;" class="btn btn-primary btn-sm deleteData" thisId="'+data[i].id
 				+'">删除数据</a></td></tr>';
 			}
 			//判断后台返回的数组有没有数据信息
@@ -242,7 +251,8 @@ function search(){
 			}
 		},
 		error:function(){
-			alert('error');
+			$('.banDel').fadeIn(200);
+			$('.banDel .delP1').text('error,搜索失败！');
 		}
 	});
 }
