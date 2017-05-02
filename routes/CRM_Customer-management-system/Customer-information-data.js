@@ -6,9 +6,9 @@ var mysql = require('mysql');
 
 //创建连接  
 var pool = mysql.createPool({
-	host:'localhost',//ip地址
+	host:'127.0.0.1',//ip地址
 	user: 'root',//数据库用户名
-	password: '1992',//数据库密码
+	password: 'root',//数据库密码
 	database:'information',//数据库名
 	port:3306//端口号 
 });

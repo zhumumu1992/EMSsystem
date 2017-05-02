@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+		<meta http-equiv="Cache-Control" content="public">
+		<meta http-equiv="content-type" content="text/html;charset=utf-8">
+		<meta name="keywords" content="EMS员工管理系统,员工管理系统,EMS">
+		<meta name="Description" content="员工管理系统是事业单位科学、全面、高效进行人事管理的系统员工管理系统，以帮助企业达到员工管理办公自动化、节约管理成本、提高企业工作效率的目的。">
+		<title>登录 - EMS员工管理系统</title>
+		<!--标题Ico图标-->
+		<link rel="icon" type="text/css" href="img/crmIco.ico"/>
+		<script src="js/jquery-2.1.4.min.js"></script>
+		<!--自定义css-->
+		<link rel="stylesheet" href="css/register_Login.css" />
+		<!--加密算法-->
+		<script src="js/md5.js"></script>
+		<body>
+			<!--加载页面时显示进度条-->
+			<div class="page_shade">
+			    <img src="img/mid.gif">
+			</div>
+			<script>
+				//加载完的时候让进度条隐藏
+			    $(window).load(
+		            function(){
+		                $('.page_shade').fadeOut(300);
+		            }
+			    )
+			</script>
+			<div class="login-container">
+				<h1>请您登陆 - EMS员工管理系统</h1>
+				<div class="connect">
+					<p>Whatever is worth doing is worth doing well.</p>
+				</div>
+
+				<form action="" method="post" id="loginForm">
+					<div>
+						<input type="text" name="username" class="username" placeholder="用户名" autocomplete="off" />
+					</div>
+					<div>
+						<input type="password" name="password" class="password" placeholder="密码" oncontextmenu="return false" onpaste="return false" />
+					</div>
+					<div style="margin-top: 25px;">
+						<p id="idcode"></p>
+						<input type="text" id="code_input" placeholder="请输入验证码(注意区分大小写)" class="txtVerification">
+					</div>
+					<button id="submit" type="button" style="margin-top: 25px;">登 陆</button>
+				</form>
+
+				<a href="register.html">
+					<button type="button" class="register-tis">还有没有账号？</button>
+				</a>
+
+			</div>
+			
+			<!--弹出遮罩层-->
+			<div class="banDel">
+				<div class="delete">
+					<div class="close">
+						<img src="img/shanchu.png">
+					</div>
+					<p class="delP1"></p>
+					<p class="delP2">
+						<a href="javascript:;" class="ok yes">确定</a><a class="ok no">取消</a>
+					</p>
+				</div>
+			</div>
+
+			<script src="js/jquery.min.js"></script>
+			<!--背景图片自动更换-->
+			<script src="js/supersized.3.2.7.min.js"></script>
+			<script src="js/supersized-init.js"></script>
+			<!--引用idcode验证码插件-->
+			<script src="js/jquery.idcode.js"></script>
+			<script type="text/javascript">
+				//打开字滑入效果
+				window.onload = function(){
+					$(".connect p").eq(0).animate({"left":"0%"}, 600);
+					$(".connect p").eq(1).animate({"left":"0%"}, 400);
+				};
+				
+				$.idcode.setCode(); //加载生成验证码方法
+		    	
+		    	//点击登录
+				$('#submit').click(function(){
+					loginFun();
+				})
+				//判断回车键登录
+				document.onkeydown = function(){
+		            if(event.keyCode == 13){
+		   				loginFun();
+		       		}else{
+		       			return;
+		   			}
+		        }
+				
+				function loginFun(){
+					//判断用户名和密码是否为空
+					if($('.username').val() == '' || $('.password').val() == ''){
+						$('.banDel').fadeIn(200);
+						$('.banDel .delP1').text('用户名和密码不能为空，请重新填写！');
+					}else{
+						var IsBy = $.idcode.validateCode()//调用返回值，返回值结果为true或者false
+						if(IsBy){//判断验证码是否正确
+							$.ajax({
+								type:"post",
+								url:"http://47.92.37.168:1992/userLogin/Login",
+								cache:true,
+								data:{
+									adminName:$('.username').val(),//向后台请求的用户名
+									adminPwd:MD5($('.password').val())//向后台请求的密码
+								},
+								success:function(data){
+									if(data.flag == 1){
+//										$('.banDel').fadeIn(200);
+//										$('.banDel .delP1').text('登录成功！');
+										sessionStorage.admin_name = $('.username').val();
+										sessionStorage.admin_id = data.adminID;
+										sessionStorage.admin_HeadImg = data.adminHeadImg;
+//										setTimeout(function(){
+											window.location.href = 'home.html';
+//										},1000)
+									}else if(data.flag == 2){
+										$('.banDel').fadeIn(200);
+										$('.banDel .delP1').text('用户名不存在，请尝试换个账号登录！');
+									}else if(data.flag == 3){
+										$('.banDel').fadeIn(200);
+										$('.banDel .delP1').text('密码错误,请重新登录！');
+									}else{
+										$('.banDel').fadeIn(200);
+										$('.banDel .delP1').text('抱歉，发生未知错误，请稍后重试！');
+									}
+									console.log(data);
+								},
+								error:function(){
+									$('.banDel').fadeIn(200);
+									$('.banDel .delP1').text('数据交互error，请联系维护人员!');
+								}
+							});
+						}else{
+							$('.banDel').fadeIn(200);
+							$('.banDel .delP1').text('验证码错误，请重新输入！');
+						}
+					}
+				}
+				
+				//点击确定提示盒子隐藏
+				$('.yes, .no, .close').bind('click',function(){
+					$('.banDel').fadeOut(100);
+				})
+			</script>
+		</body>
+
+</html>

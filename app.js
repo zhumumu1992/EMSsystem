@@ -6,6 +6,10 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 
+
+
+
+
 //自定义中间件
 var uploadImg = require('./routes/CRM_Customer-management-system/login_register');//CRM注册、登录后台
 var register_Login = require('./routes/CRM_Customer-management-system/login_register');//CRM注册、登录后台
@@ -71,7 +75,7 @@ app.use(function(err, req, res, next) {
 
 
 
-app.listen('1967',function(){
-	console.log('server start...');
+app.listen('1992',function(){
+	console.log('木木提示您:后端服务已开启！');
 })
 module.exports = app;

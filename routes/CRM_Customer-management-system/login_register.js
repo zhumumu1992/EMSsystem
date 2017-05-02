@@ -7,9 +7,9 @@ var formidable = require('formidable');//上传图片用的
 var mysql = require('mysql');
 
 var pool = mysql.createPool({
-	host:'localhost',//ip地址
+	host:'127.0.0.1',//ip地址
 	user: 'root',//数据库用户名
-	password: '1992',//数据库密码
+	password: 'root',//数据库密码
 	database:'information',//数据库名
 	port:3306//端口号 
 });
